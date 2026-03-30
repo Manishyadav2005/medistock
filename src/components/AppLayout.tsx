@@ -6,8 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState, useRef } from "react";
+import { Outlet } from "react-router-dom";
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+export function AppLayout(){
   const navigate = useNavigate();
 
   const [alerts, setAlerts] = useState<any[]>([]);
@@ -172,9 +173,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           </header>
 
           {/* MAIN */}
-          <main className="flex-1 p-6 overflow-auto">
-            {children}
-          </main>
+         <main className="flex-1 p-6 overflow-auto">
+  <Outlet />
+</main>
 
         </div>
       </div>

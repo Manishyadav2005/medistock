@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PharmacyProvider } from "@/context/PharmacyContext";
-import { AppLayout } from "@/components/AppLayout";
 
 import Index from "./pages/Index";
 import Inventory from "./pages/Inventory";
@@ -21,6 +20,7 @@ import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import { AppLayout } from "@/components/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -31,95 +31,37 @@ const App = () => (
       <Sonner />
       <PharmacyProvider>
         <BrowserRouter>
-          <AppLayout>
-            <Routes>
-              
+          <Routes>
 
-  {/* 🔓 Public */}
-  <Route path="/login" element={<Login />} />
+            {/* 🔓 Public Route */}
+            <Route path="/login" element={<Login />} />
 
-  {/* 🔐 Dashboard */}
-  <Route path="/" element={
-    <ProtectedRoute allowedRoles={["admin", "staff"]}>
-      <Index />
-    </ProtectedRoute>
-  } />
+            {/* 🔐 Protected Routes with Layout */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute allowedRoles={["admin", "staff"]}>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Index />} />
+              <Route path="inventory" element={<Inventory />} />
+              <Route path="billing" element={<Billing />} />
+              <Route path="suppliers" element={<Suppliers />} />
+              <Route path="purchases" element={<Purchases />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="alerts" element={<Alerts />} />
+              <Route path="reorder" element={<Reorder />} />
+              <Route path="staff" element={<Staff />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
 
-  {/* 🔐 Admin only */}
-  <Route path="/inventory" element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Inventory />
-    </ProtectedRoute>
-  } />
+            {/* ❌ Not Found */}
+            <Route path="*" element={<NotFound />} />
 
-  {/* 🔐 Admin + Staff */}
-  <Route path="/billing" element={
-    <ProtectedRoute allowedRoles={["admin", "staff"]}>
-      <Billing />
-    </ProtectedRoute>
-  } />
-
-  {/* 🔐 Admin only */}
-  <Route path="/suppliers" element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Suppliers />
-    </ProtectedRoute>
-  } />
-
-  <Route path="/purchases" element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Purchases />
-    </ProtectedRoute>
-  } />
-
-  <Route path="/analytics" element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Analytics />
-    </ProtectedRoute>
-  } />
-
-  <Route path="/alerts" element={
-    <ProtectedRoute allowedRoles={["admin", "staff"]}>
-      <Alerts />
-    </ProtectedRoute>
-  } />
-
-  <Route path="/reorder" element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Reorder />
-    </ProtectedRoute>
-  } />
-  <Route
-  path="/staff"
-  element={
-    <ProtectedRoute allowedRoles={["admin"]}>
-      <Staff />
-    </ProtectedRoute>
-  }
-/>
-
-<Route
-  path="/settings"
-  element={
-    <ProtectedRoute allowedRoles={["admin", "staff"]}>
-      <Settings />
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute allowedRoles={["admin", "staff"]}>
-      <Profile />
-    </ProtectedRoute>
-  }
-/>
-
-  {/* ❌ Not Found */}
-  <Route path="*" element={<NotFound />} />
-
-</Routes>
-          </AppLayout>
+          </Routes>
         </BrowserRouter>
       </PharmacyProvider>
     </TooltipProvider>
